@@ -1,6 +1,12 @@
 # Day 08 Lab — RAG Pipeline
 # Cài đặt: pip install -r requirements.txt
 
+# === PyTorch CPU ===
+# Chỉ định nguồn tải PyTorch bản CPU để tránh tải bản CUDA nặng nề
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+
 # === Core ===
 python-dotenv>=1.0.0
 
