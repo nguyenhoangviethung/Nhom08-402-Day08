@@ -29,10 +29,11 @@ load_dotenv()
 DOCS_DIR = Path(__file__).parent / "data" / "docs"
 CHROMA_DB_DIR = Path(__file__).parent / "chroma_db"
 
-# TODO Sprint 1: Điều chỉnh chunk size và overlap theo quyết định của nhóm
-# Gợi ý từ slide: chunk 300-500 tokens, overlap 50-80 tokens
-CHUNK_SIZE = 400       # tokens (ước lượng bằng số ký tự / 4)
-CHUNK_OVERLAP = 80     # tokens overlap giữa các chunk
+# Max input của bkai-foundation-models/vietnamese-bi-encoder: 256 tokens
+# Trừ 2 special tokens [CLS][SEP] → 254 tokens thực dụng
+# Đặt 200 để có buffer an toàn, tránh bị cắt khi tokenize tiếng Việt
+CHUNK_SIZE = 200       # tokens (ước lượng bằng số ký tự / 4 → ~800 ký tự/chunk)
+CHUNK_OVERLAP = 50     # tokens overlap (~20% chunk size, đủ ngữ cảnh liên chunk)
 
 
 # =============================================================================
