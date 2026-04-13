@@ -47,12 +47,12 @@ VARIANT_CONFIG_HYBRID = {
     "label": "variant_hybrid",
 }
 
-VARIANT_CONFIG_HYBRID = {
+VARIANT_CONFIG_RERANK = {
     "retrieval_mode": "dense",
     "top_k_search": 10,
     "top_k_select": 3,  
     "use_rerank": True,
-    "label": "variant_hybrid",
+    "label": "rerank",
 }
 
 VARIANT_CONFIG_QUERY_TRANSFORM = {
@@ -65,7 +65,7 @@ VARIANT_CONFIG_QUERY_TRANSFORM = {
     "label": "variant_query_transform_expansion",
 }
 
-VARIANT_CONFIG = VARIANT_CONFIG_QUERY_TRANSFORM
+VARIANT_CONFIG = VARIANT_CONFIG_RERANK
 JUDGE_MODEL = os.getenv("JUDGE_MODEL", os.getenv("LLM_MODEL", "gpt-4o-mini"))
 _judge_client: Optional[OpenAI] = None
 
