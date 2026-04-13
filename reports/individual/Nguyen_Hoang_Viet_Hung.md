@@ -13,7 +13,7 @@
 - Implement/Refactor index.py, eval.py
 - Thực hiện bài tập grading_question.json
 - Demo sản phẩm, trả lời câu hỏi về tech stack
-- Review các file kết quả results/*, các file logs/*
+- Review các file kết quả results/, các file logs/
 _________________
 
 ---
