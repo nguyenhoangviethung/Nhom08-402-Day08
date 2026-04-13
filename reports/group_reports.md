@@ -102,4 +102,3 @@ Nút thắt lớn nằm ở khâu Generation nhưng nhóm lại mất nhiều th
 
 Dựa trên kết luận từ Tuning Log, nhóm sẽ triển khai **Reranking (Cross-Encoder: BAAI/bge-reranker-v2-m3)**.
 Vì Context Recall đã đạt max (5.0), việc cần làm không phải là tìm *thêm* tài liệu, mà là *sắp xếp* lại tài liệu. Reranker sẽ giúp đẩy đúng chunk có chứa điểm mấu chốt (như escalation 10 phút ở q06) lên vị trí số 1, từ đó cải thiện Completeness. Song song đó, nhóm sẽ siết chặt Grounded Prompt để trị dứt điểm lỗi bịa đặt.
-
