@@ -40,11 +40,11 @@ BASELINE_CONFIG = {
 
 # Keep only one changed variable for A/B fairness.
 VARIANT_CONFIG = {
-    "retrieval_mode": "hybrid",
+    "retrieval_mode": "dense",
     "top_k_search": 10,
     "top_k_select": 3,
-    "use_rerank": False,
-    "label": "variant_hybrid",
+    "use_rerank": True,
+    "label": "variant_dense_rerank",
 }
 
 JUDGE_MODEL = os.getenv("JUDGE_MODEL", os.getenv("LLM_MODEL", "gpt-4o-mini"))
