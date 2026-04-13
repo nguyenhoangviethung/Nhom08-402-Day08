@@ -1,0 +1,16 @@
+#Environments
+.venv/
+venv/
+env/
+
+
+#Python internals
+__pycache__/
+
+#Environment variables
+.env
+
+#IDEs
+.DS_Store
+.vscode/
+.idea/
