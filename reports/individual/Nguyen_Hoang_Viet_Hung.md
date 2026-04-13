@@ -29,7 +29,7 @@ _________________
 
 ## 3. Điều tôi ngạc nhiên hoặc gặp khó khăn (100-150 từ)
 
-- Giả thuyết ban đầu là cấu hình Variant chắc chắn sẽ vượt trội hơn Baseline. Tuy nhiên thực tế không hẳn vậy: Các log chỉ ra thường có kết quả hòa (Tie)
+- Variant luôn tốt hơn Baseline?? Tôi đã nghĩ vậy, tuy nhiên thực tế không hẳn vậy: Các log chỉ ra thường có kết quả hòa (Tie)
 thật chí baseline còn có thể tốt hơn. (Xem log ở results)
 - Tôi có cảm giác khó khăn khi tuning tham số, đôi lúc nó thực sự không thay đổi nhiều làm tôi không thể nhận ra lỗi sai ở đâu, hay các tiêu chí đánh giá 
 kém tôi cũng phân vân không biết nên sửa lại kĩ thuật chunk hay system prompt hay kĩ thuật retrival. Mất thời gian khá lâu tôi mới năm bắt được
