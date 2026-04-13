@@ -277,7 +277,7 @@ def transform_query(query: str, strategy: str = "expansion") -> List[str]:
 
     Ví dụ expansion prompt:
         "Given the query: '{query}'
-         Generate 2-3 alternative phrasings or related terms in Vietnamese.
+         Generate 2-3 alternative phrasings or related terms in aVietnamese.
          Output as JSON array of strings."
 
     Ví dụ decomposition:
@@ -415,6 +415,8 @@ def rag_answer(
     top_k_search: int = TOP_K_SEARCH,
     top_k_select: int = TOP_K_SELECT,
     use_rerank: bool = False,
+    use_transform: bool = False,               
+    transform_strategy: str = "expansion",
     verbose: bool = False,
 ) -> Dict[str, Any]:
     """
@@ -454,12 +456,14 @@ def rag_answer(
         "top_k_search": top_k_search,
         "top_k_select": top_k_select,
         "use_rerank": use_rerank,
+        "use_transform": use_transform,       
         "use_transform": False, # Mặc định là False cho baseline
     }
     
     # Variant C: Query Transformation
     # Trong Sprint 3, bạn có thể bật config["use_transform"] = True
-    queries = transform_query(query) if config["use_transform"] else [query]
+    queries = transform_query(query, strategy=transform_strategy) if config["use_transform"] else [query]
+    # queries = transform_query(query) if config["use_transform"] else [query]
 
     # --- Bước 1: Retrieve ---
     all_candidates = []

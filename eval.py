@@ -39,14 +39,33 @@ BASELINE_CONFIG = {
 }
 
 # Keep only one changed variable for A/B fairness.
-VARIANT_CONFIG = {
+VARIANT_CONFIG_HYBRID = {
     "retrieval_mode": "hybrid",
     "top_k_search": 10,
-    "top_k_select": 3,
+    "top_k_select": 3,  
     "use_rerank": False,
     "label": "variant_hybrid",
 }
 
+VARIANT_CONFIG_HYBRID = {
+    "retrieval_mode": "dense",
+    "top_k_search": 10,
+    "top_k_select": 3,  
+    "use_rerank": True,
+    "label": "variant_hybrid",
+}
+
+VARIANT_CONFIG_QUERY_TRANSFORM = {
+    "retrieval_mode": "dense",     
+    "top_k_search": 10,
+    "top_k_select": 3,
+    "use_rerank": False,           
+    "use_transform": True,         
+    "transform_strategy": "expansion",
+    "label": "variant_query_transform_expansion",
+}
+
+VARIANT_CONFIG = VARIANT_CONFIG_QUERY_TRANSFORM
 JUDGE_MODEL = os.getenv("JUDGE_MODEL", os.getenv("LLM_MODEL", "gpt-4o-mini"))
 _judge_client: Optional[OpenAI] = None
 
@@ -280,6 +299,8 @@ def run_scorecard(
                 top_k_search=config.get("top_k_search", 10),
                 top_k_select=config.get("top_k_select", 3),
                 use_rerank=config.get("use_rerank", False),
+                use_transform=config.get("use_transform", False),               
+                transform_strategy=config.get("transform_strategy", "expansion"),
                 verbose=False,
             )
             answer = result["answer"]
