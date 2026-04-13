@@ -19,7 +19,7 @@
 
 **Mô tả ngắn gọn:**
 > TODO: Mô tả hệ thống trong 2-3 câu. Nhóm xây gì? Cho ai dùng? Giải quyết vấn đề gì?
-
+Xây dựng hệ thống Trợ lý ảo nội bộ (RAG Pipeline) phục vụ cho khối Customer Success (CS) và IT Helpdesk. Hệ thống tự động tra cứu, trích xuất và tổng hợp thông tin từ các tài liệu nghiệp vụ (Chính sách nhân sự, SLA, Quy trình cấp quyền) để trả lời các câu hỏi nghiệp vụ một cách chính xác, có kiểm chứng (Grounded) và ngăn chặn tuyệt đối tình trạng sinh ảo giác (Hallucination).
 ---
 
 ## 2. Indexing Pipeline (Sprint 1)
@@ -27,11 +27,11 @@
 ### Tài liệu được index
 | File | Nguồn | Department | Số chunk |
 |------|-------|-----------|---------|
-| `policy_refund_v4.txt` | policy/refund-v4.pdf | CS | TODO |
-| `sla_p1_2026.txt` | support/sla-p1-2026.pdf | IT | TODO |
-| `access_control_sop.txt` | it/access-control-sop.md | IT Security | TODO |
-| `it_helpdesk_faq.txt` | support/helpdesk-faq.md | IT | TODO |
-| `hr_leave_policy.txt` | hr/leave-policy-2026.pdf | HR | TODO |
+| `policy_refund_v4.txt` | policy/refund-v4.pdf | CS | TODO |6
+| `sla_p1_2026.txt` | support/sla-p1-2026.pdf | IT | TODO |5
+| `access_control_sop.txt` | it/access-control-sop.md | IT Security | TODO |7
+| `it_helpdesk_faq.txt` | support/helpdesk-faq.md | IT | TODO |6
+| `hr_leave_policy.txt` | hr/leave-policy-2026.pdf | HR | TODO |5
 
 ### Quyết định chunking
 | Tham số | Giá trị | Lý do |
@@ -42,13 +42,13 @@
 | Metadata fields | source, section, effective_date, department, access | Phục vụ filter, freshness, citation |
 
 ### Embedding model
-- **Model**: TODO (OpenAI text-embedding-3-small / paraphrase-multilingual-MiniLM-L12-v2)
+- **Model**: TODO (bkai-foundation-models/vietnamese-bi-encoder)
 - **Vector store**: ChromaDB (PersistentClient)
-- **Similarity metric**: Cosine
+- **Similarity metric**: Cosine (`hnsw:space: cosine`)
 
 ---
 
-## 3. Retrieval Pipeline (Sprint 2 + 3)
+## 3. Retrieval Pipeline (Sprint 2 + 3) (chưa làm)
 
 ### Baseline (Sprint 2)
 | Tham số | Giá trị |
