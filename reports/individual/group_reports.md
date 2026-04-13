@@ -83,27 +83,12 @@ Dựa vào `docs/tuning-log.md`, nhóm so sánh Baseline với Variant 2 (Hybrid
 ## 5. Phân công và đánh giá nhóm
 | Thành viên | Phần đã làm | Sprint
 | :--- | :--- | :--- |
-<<<<<<< HEAD
 | **Hoàng** | Tech Lead / Eval Owner | Phát triển luồng Indexing (`index.py`) và chuẩn bị dữ liệu kiểm thử (`data/test_questions.json`). |
 | **Hưng** | Tech Lead / Eval Owner | Đồng phát triển `index.py`, xây dựng script đánh giá (`eval.py`) và chấm điểm `results/scorecard_baseline.md`,`results/scorecard_variant.md`, `group_reports.md` |
 | **Hồng Anh** | Tech Lead | Chịu trách nhiệm chính phát triển lõi hệ thống RAG, luồng truy xuất và sinh câu trả lời (`rag_answer.py`). |
 | **Hùng** | Tech Lead / Doc Owner | Xây dựng script `eval.py`, chịu trách nhiệm chạy file log Giờ G (`logs/grading_run.json`) và ghi nhận `docs/tuning-log.md`. |
 | **Giang** | Eval Owner / Doc Owner | Thực hiện đánh giá `results/scorecard_baseline.md`, thiết kế tài liệu `docs/architecture.md` và tổng hợp `reports/group_report.md`. |
 | **Bình** | Eval Owner / Doc Owner | Thực hiện đánh giá cấu hình Variant (`results/scorecard_variant.md`), ghi nhận A/B testing (`docs/tuning-log.md`) và viết `reports/group_report.md`. |
-=======
-| **Hoàng** |Phát triển luồng Indexing (`index.py`) và chuẩn bị dữ liệu kiểm thử (`data/test_questions.json`). |  1  |
-| **Hưng** | Đồng phát triển `index.py`, xây dựng script đánh giá (`eval.py`) và chấm điểm `results/scorecard_baseline.md`. |   1, 4      |
-| **Hồng Anh** | Chịu trách nhiệm chính phát triển lõi hệ thống RAG, luồng truy xuất và sinh câu trả lời (`rag_answer.py`). |   2, 3     |
-| **Hùng** | Xây dựng script `eval.py`, chịu trách nhiệm chạy file log Giờ G (`logs/grading_run.json`) và ghi nhận `docs/tuning-log.md`. |  4     |
-| **Giang** | Thực hiện đánh giá `results/scorecard_baseline.md`, thiết kế tài liệu `docs/architecture.md` và tổng hợp `reports/group_report.md`. |    4    |
-| **Bình** | Thực hiện đánh giá cấu hình Variant (`results/scorecard_variant.md`), ghi nhận A/B testing (`docs/tuning-log.md`) và viết `reports/group_report.md`. |      4     |
-
-**Điều nhóm làm tốt:**
-Việc chọn mô hình `vietnamese-bi-encoder` giúp Context Recall luôn đạt 100%. Quá trình Tuning (chạy 2 Variant) được ghi nhận log bài bản, phân lập rõ ràng nguyên nhân lỗi.
-
-**Điều nhóm làm chưa tốt:**
-Nút thắt lớn nằm ở khâu Generation nhưng nhóm lại mất nhiều thời gian loay hoay sửa ở khâu Retrieval (Transform/Hybrid). 
->>>>>>> afa8ac38fa5f2d86758138fcdfb8beb3a3138656
 
 ---
 
