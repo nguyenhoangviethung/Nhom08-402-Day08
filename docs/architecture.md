@@ -36,13 +36,13 @@ Xây dựng hệ thống Trợ lý ảo nội bộ (RAG Pipeline) phục vụ ch
 ### Quyết định chunking
 | Tham số | Giá trị | Lý do |
 |---------|---------|-------|
-| Chunk size | TODO tokens | TODO |
-| Overlap | TODO tokens | TODO |
-| Chunking strategy | Heading-based / paragraph-based | TODO |
-| Metadata fields | source, section, effective_date, department, access | Phục vụ filter, freshness, citation |
+| Chunk size | 200 | Phù hợp với giới hạn max_seq_length (256) của model Bi-Encoder để tránh mất thông tin khi embedding. |
+| Overlap | 50 | Đảm bảo tính liên kết ngữ cảnh giữa các đoạn văn bản khi bị cắt nhỏ. |
+| Chunking strategy | Heading-based | Các tài liệu nghiệp vụ (SOP, Policy, SLA) có cấu trúc phân cấp chặt chẽ. Cắt theo Heading giúp giữ trọn vẹn một quy trình hoặc một điều khoản chính sách trong cùng một chunk, tránh tình trạng một bước hướng dẫn bị tách rời khỏi ngữ cảnh của nó. |
+| Metadata fields | chunk_id, source, department,	section,	effective_date,	access,	text | Phục vụ filter, freshness, citation |
 
 ### Embedding model
-- **Model**: TODO (bkai-foundation-models/vietnamese-bi-encoder)
+- **Model**: bkai-foundation-models/vietnamese-bi-encoder
 - **Vector store**: ChromaDB (PersistentClient)
 - **Similarity metric**: Cosine (`hnsw:space: cosine`)
 
@@ -53,7 +53,7 @@ Xây dựng hệ thống Trợ lý ảo nội bộ (RAG Pipeline) phục vụ ch
 ### Baseline (Sprint 2)
 | Tham số | Giá trị |
 |---------|---------|
-| Strategy | Dense (embedding similarity) |
+| Strategy | Dense + Rerank |
 | Top-k search | 10 |
 | Top-k select | 3 |
 | Rerank | Không |
@@ -61,15 +61,15 @@ Xây dựng hệ thống Trợ lý ảo nội bộ (RAG Pipeline) phục vụ ch
 ### Variant (Sprint 3)
 | Tham số | Giá trị | Thay đổi so với baseline |
 |---------|---------|------------------------|
-| Strategy | TODO (hybrid / dense) | TODO |
-| Top-k search | TODO | TODO |
-| Top-k select | TODO | TODO |
-| Rerank | TODO (cross-encoder / MMR) | TODO |
-| Query transform | TODO (expansion / HyDE / decomposition) | TODO |
+| Strategy | hybrid | thêm rerank |
+| Top-k search | 10 | Giữ nguyên số lượng ứng viên truy xuất ban đầu từ ChromaDB. |
+| Top-k select | 3 | Giữ nguyên số lượng chunk tối ưu đưa vào Prompt để tránh nhiễu ngữ cảnh. |
+| Rerank | BAAI/bge-reranker-v2-m3 | Sử dụng mô hình Cross-encoder để xếp hạng lại độ liên quan của các chunk. |
+| Query transform | expansion | Sử dụng LLM để mở rộng câu hỏi gốc (sinh thêm từ đồng nghĩa, ngữ cảnh) trước khi đưa đi tìm kiếm vector. Giúp bắt dính các tài liệu dùng từ vựng khác với truy vấn của user (như tên tài liệu cũ, alias). | |
 
 **Lý do chọn variant này:**
 > TODO: Giải thích tại sao chọn biến này để tune.
-> Ví dụ: "Chọn hybrid vì corpus có cả câu tự nhiên (policy) lẫn mã lỗi và tên chuyên ngành (SLA ticket P1, ERR-403)."
+> Nhóm quyết định chọn Reranker vì kết quả Baseline cho thấy hệ thống đôi khi lấy đúng tài liệu nhưng chưa ưu tiên được chunk chứa câu trả lời chính xác nhất lên đầu. Việc dùng Reranker giúp lọc nhiễu và đảm bảo 3 chunk đưa vào LLM là 3 mảnh ghép có giá trị thông tin cao nhất, từ đó cải thiện độ hoàn thiện của câu trả lời.
 
 ---
 
@@ -77,28 +77,24 @@ Xây dựng hệ thống Trợ lý ảo nội bộ (RAG Pipeline) phục vụ ch
 
 ### Grounded Prompt Template
 ```
-Answer only from the retrieved context below.
-If the context is insufficient, say you do not know.
-Cite the source field when possible.
-Keep your answer short, clear, and factual.
+Bạn là một trợ lý AI hữu ích. Hãy trả lời câu hỏi CHỈ dựa trên ngữ cảnh dưới đây.
+    Nếu ngữ cảnh không đủ, hãy nói bạn không biết. Hãy trích dẫn nguồn bằng số thứ tự trong ngoặc vuông [1].
+    Hãy trả lời bằng Tiếng Việt.
 
-Question: {query}
+    Question: {query}
 
-Context:
-[1] {source} | {section} | score={score}
-{chunk_text}
+    Context:
+    {context_block}
 
-[2] ...
-
-Answer:
+    Answer:"""
 ```
 
 ### LLM Configuration
 | Tham số | Giá trị |
 |---------|---------|
-| Model | TODO (gpt-4o-mini / gemini-1.5-flash) |
+| Model | openAI-4o|
 | Temperature | 0 (để output ổn định cho eval) |
-| Max tokens | 512 |
+| Max tokens | 256 |
 
 ---
 
@@ -106,13 +102,13 @@ Answer:
 
 > Dùng khi debug — kiểm tra lần lượt: index → retrieval → generation
 
-| Failure Mode | Triệu chứng | Cách kiểm tra |
+| Failure Mode | Triệu chứng | Cách kiểm tra (Dựa trên code thực tế) |
 |-------------|-------------|---------------|
-| Index lỗi | Retrieve về docs cũ / sai version | `inspect_metadata_coverage()` trong index.py |
-| Chunking tệ | Chunk cắt giữa điều khoản | `list_chunks()` và đọc text preview |
-| Retrieval lỗi | Không tìm được expected source | `score_context_recall()` trong eval.py |
-| Generation lỗi | Answer không grounded / bịa | `score_faithfulness()` trong eval.py |
-| Token overload | Context quá dài → lost in the middle | Kiểm tra độ dài context_block |
+| Index lỗi | Thiếu metadata (đặc biệt là ngày hiệu lực) dẫn đến không kiểm soát được version tài liệu. | Chạy hàm `inspect_metadata_coverage()` trong `index.py` để xem thống kê "Chunks thiếu effective_date". |
+| Chunking tệ | Chunk bị hụt ý hoặc lưu sai section. | Chạy hàm `list_chunks()` trong `index.py` để đối chiếu `Section` và đọc `Text preview`. |
+| Retrieval lỗi | Không lấy được tài liệu đích (expected sources) để trả lời. | Xem điểm số và ghi chú sinh ra từ hàm `score_context_recall()` trong `eval.py`. Hàm này sẽ liệt kê chi tiết danh sách tài liệu bị `missing`. |
+| Generation lỗi | Sinh câu trả lời bịa đặt (hallucinate) hoặc không dựa vào tài liệu (not grounded). | Kiểm tra kết quả từ hàm `score_faithfulness()` trong `eval.py` (nếu điểm = 1 tức là LLM đang bịa thông tin hoàn toàn). |
+| Token overload | Mất thông tin do context đẩy vào LLM quá dài. | Trong `eval.py`, hàm `_build_chunks_text()` đã thiết lập sẵn cơ chế phòng vệ bằng tham số `max_chars=5000` để tự động cắt bớt context nếu quá dài. |
 
 ---
 
@@ -122,15 +118,21 @@ Answer:
 
 ```mermaid
 graph LR
-    A[User Query] --> B[Query Embedding]
-    B --> C[ChromaDB Vector Search]
-    C --> D[Top-10 Candidates]
-    D --> E{Rerank?}
-    E -->|Yes| F[Cross-Encoder]
-    E -->|No| G[Top-3 Select]
-    F --> G
-    G --> H[Build Context Block]
-    H --> I[Grounded Prompt]
-    I --> J[LLM]
-    J --> K[Answer + Citation]
+A[User Query] --> B{Sử dụng Query Transform?}
+    B -->|Có (Variant)| C[Query Expansion]
+    B -->|Không (Baseline)| D[Query Embedding]
+    C --> D
+    
+    D --> E[(ChromaDB Vector Search)]
+    E --> F[Top-10 Candidates]
+    
+    F --> G{Sử dụng Rerank?}
+    G -->|Có (Variant)| H[Cross-Encoder: BAAI/bge-reranker-v2-m3]
+    G -->|Không (Baseline)| I[Top-3 Select]
+    
+    H --> I
+    I --> J[Build Context Block]
+    J --> K[Grounded Prompt]
+    K --> L((LLM: gpt-4o-mini))
+    L --> M[Answer + Citation]
 ```

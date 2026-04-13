@@ -1,6 +1,5 @@
 # Scorecard: Baseline Pipeline (Dense Retrieval)
 
-**Người đánh giá:** [Nguyễn Thị Hương Giang]
 **Thời gian đánh giá:** [15h:30, 12/04/2026]
 **Cấu hình Baseline:** `retrieval_mode="dense"`, `top_k=3`, `LLM=OpenAI 4o`
 
