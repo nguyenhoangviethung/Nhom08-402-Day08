@@ -90,3 +90,124 @@ Nhóm 08 đã hoàn thành đầy đủ 4 Sprint, xây dựng thành công một
 1.  **Kiểm soát Hallucination (Self-Correction):** Xây dựng một luồng kiểm tra phụ để LLM tự chấm điểm lại câu trả lời của chính mình so với Context trước khi hiển thị cho người dùng, đảm bảo tỷ lệ Abstain (từ chối trả lời) chính xác tuyệt đối.
 2.  **Hybrid Search (BM25 + Vector):** Mặc dù Vector Search đang làm rất tốt, việc bổ sung tìm kiếm từ khóa (Keyword Search) vẫn cần thiết để bắt dính 100% các mã lỗi phần mềm (như ERR-403) hay mã ticket đặc thù của khối IT Helpdesk.
 3.  **Thử nghiệm Reranker (Cross-Encoder):** Do Query Expansion không cải thiện được điểm số, nhóm đề xuất thay thế bằng mô hình Reranker trong tương lai. Việc chấm điểm lại độ liên quan trực tiếp giữa câu hỏi và từng chunk có thể giúp đẩy các chunk có thông tin chi tiết nhất lên Top 1, từ đó cải thiện điểm Completeness (hiện đang khá thấp ở mức 3.40/5.00).
+
+### Grading run log
+[
+  {
+    "id": "gq01",
+    "question": "SLA xử lý ticket P1 đã thay đổi như thế nào so với phiên bản trước?",
+    "answer": "SLA xử lý ticket P1 đã thay đổi từ phiên bản trước như sau: Thời gian xử lý và khắc phục (resolution) đã được cập nhật từ 6 giờ xuống 4 giờ trong phiên bản v2026.1 (2026-01-15) [2].",
+    "sources": [
+      "support/sla-p1-2026.pdf",
+      "it/access-control-sop.md"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T16:56:56.024031"
+  },
+  {
+    "id": "gq02",
+    "question": "Khi làm việc remote, tôi phải dùng VPN và được kết nối trên tối đa bao nhiêu thiết bị?",
+    "answer": "Khi làm việc remote, bạn được kết nối VPN trên tối đa 2 thiết bị cùng lúc [1].",
+    "sources": [
+      "hr/leave-policy-2026.pdf",
+      "it/access-control-sop.md",
+      "support/helpdesk-faq.md"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T16:57:29.339481"
+  },
+  {
+    "id": "gq03",
+    "question": "Đơn hàng mua trong chương trình Flash Sale và đã kích hoạt sản phẩm có được hoàn tiền không?",
+    "answer": "Đơn hàng mua trong chương trình Flash Sale và đã kích hoạt sản phẩm sẽ không được hoàn tiền. Điều này nằm trong ngoại lệ không được hoàn tiền, bao gồm cả đơn hàng đã áp dụng mã giảm giá đặc biệt theo chương trình khuyến mãi Flash Sale và sản phẩm đã được kích hoạt hoặc đăng ký tài khoản [1].",
+    "sources": [
+      "policy/refund-v4.pdf"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T16:58:00.719584"
+  },
+  {
+    "id": "gq04",
+    "question": "Nếu chọn nhận store credit thay vì hoàn tiền, tôi được bao nhiêu phần trăm so với số tiền gốc?",
+    "answer": "Nếu bạn chọn nhận store credit thay vì hoàn tiền, bạn sẽ nhận được 110% so với số tiền gốc [1].",
+    "sources": [
+      "policy/refund-v4.pdf"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T16:58:33.715637"
+  },
+  {
+    "id": "gq05",
+    "question": "Contractor từ bên ngoài công ty có thể được cấp quyền Admin Access không? Nếu có, cần bao nhiêu ngày và có yêu cầu đặc biệt gì?",
+    "answer": "Có, contractor từ bên ngoài công ty có thể được cấp quyền Admin Access. Quy trình yêu cầu cấp quyền bao gồm việc tạo Access Request ticket, phê duyệt của Line Manager trong 1 ngày làm việc, và sau đó IT Admin sẽ kiểm tra compliance và cấp quyền. Tổng thời gian có thể mất ít nhất 1 ngày làm việc cho phê duyệt ban đầu, nhưng thời gian thực tế có thể lâu hơn tùy thuộc vào các bước tiếp theo trong quy trình [2]. Không có yêu cầu đặc biệt nào được nêu rõ trong ngữ cảnh.",
+    "sources": [
+      "it/access-control-sop.md"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T16:58:55.737093"
+  },
+  {
+    "id": "gq06",
+    "question": "Lúc 2 giờ sáng xảy ra sự cố P1, on-call engineer cần cấp quyền tạm thời cho một engineer xử lý incident. Quy trình cụ thể như thế nào và quyền này tồn tại bao lâu?",
+    "answer": "Quy trình cụ thể để cấp quyền tạm thời cho một engineer xử lý incident P1 như sau:\n\n1. On-call IT Admin có thể cấp quyền tạm thời sau khi được Tech Lead phê duyệt bằng lời.\n2. Quyền tạm thời này có thể tồn tại tối đa 24 giờ.\n3. Sau 24 giờ, phải có ticket chính thức hoặc quyền sẽ bị thu hồi tự động.\n4. Mọi quyền tạm thời phải được ghi log vào hệ thống Security Audit [1].",
+    "sources": [
+      "support/sla-p1-2026.pdf",
+      "it/access-control-sop.md"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T16:59:26.997114"
+  },
+  {
+    "id": "gq07",
+    "question": "Công ty sẽ phạt bao nhiêu nếu team IT vi phạm cam kết SLA P1?",
+    "answer": "Tôi không biết.",
+    "sources": [
+      "support/sla-p1-2026.pdf",
+      "it/access-control-sop.md"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T16:59:55.147773"
+  },
+  {
+    "id": "gq08",
+    "question": "Nhân viên phải báo trước bao nhiêu ngày để xin nghỉ phép năm? Con số này có giống với số ngày cần giấy tờ khi nghỉ ốm không?",
+    "answer": "Nhân viên phải báo trước ít nhất 3 ngày làm việc để xin nghỉ phép năm [2]. Số ngày này không giống với số ngày cần giấy tờ khi nghỉ ốm, vì khi nghỉ ốm, nhân viên chỉ cần thông báo cho Line Manager trước 9:00 sáng ngày nghỉ, và nếu nghỉ trên 3 ngày liên tiếp thì cần có giấy tờ y tế từ bệnh viện [1].",
+    "sources": [
+      "hr/leave-policy-2026.pdf",
+      "support/helpdesk-faq.md"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T17:00:26.427823"
+  },
+  {
+    "id": "gq09",
+    "question": "Mật khẩu tài khoản công ty cần đổi định kỳ không? Nếu có, hệ thống sẽ nhắc nhở trước bao nhiêu ngày và đổi qua đâu?",
+    "answer": "Có, mật khẩu tài khoản công ty cần được thay đổi định kỳ mỗi 90 ngày. Hệ thống sẽ nhắc nhở trước 7 ngày khi mật khẩu sắp hết hạn [1].",
+    "sources": [
+      "it/access-control-sop.md",
+      "support/helpdesk-faq.md"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T17:00:51.582642"
+  },
+  {
+    "id": "gq10",
+    "question": "Chính sách hoàn tiền hiện tại áp dụng cho đơn hàng đặt trước ngày 01/02/2026 không?",
+    "answer": "Chính sách hoàn tiền hiện tại không áp dụng cho đơn hàng đặt trước ngày 01/02/2026. Các đơn hàng đặt trước ngày này sẽ áp dụng theo chính sách hoàn tiền phiên bản 3 [1].",
+    "sources": [
+      "policy/refund-v4.pdf"
+    ],
+    "chunks_retrieved": 3,
+    "retrieval_mode": "dense",
+    "timestamp": "2026-04-13T17:01:20.349344"
+  }
+]
