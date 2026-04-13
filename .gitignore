@@ -1,16 +1,28 @@
-#Environments
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+env/
 .venv/
 venv/
-env/
 
-
-#Python internals
-__pycache__/
-
-#Environment variables
+# Local environment variables and secrets
 .env
 
-#IDEs
+# Vector store and local indexing artifacts
+chroma_db/
+
+# OS/editor files
 .DS_Store
+Thumbs.db
 .vscode/
 .idea/
+
+digest.txt
